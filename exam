@@ -1,0 +1,137 @@
+#include <iostream>
+using namespace std;
+
+class node{
+	public:
+	int patientID;
+	node *next;
+	node *prev;
+	
+	node(int id){
+		patientID=id;
+		next=NULL;
+		prev=NULL;
+	}
+};
+
+class ERqueue{
+	public:
+		node *head;
+		node *tail;
+		
+		ERqueue()
+		{
+			head=NULL;
+			tail=NULL;
+		}
+		void insertAtBeginning(int id)
+		{
+			node *newNode=new node(id);
+			if(head==NULL)
+			{
+				head=tail=newNode;
+			}
+			else
+			{
+				newNode->next=head;
+				head->prev=newNode;
+				head=newNode;
+			}
+			cout<<"The id that is inserted at beginning:"<<id<<endl;
+		}
+		
+		void insertAtEnd(int id)
+		{
+			node *newNode=new node(id);
+			if(head==NULL)
+			{
+				cout<<"The list is empty..../n Insertion at end is not possible."<<endl;
+			}
+			else
+			{
+				tail->next=newNode;
+				newNode->prev=tail;
+				tail=newNode;
+			}
+			cout<<"Inserted patiend at the end is:"<<id<<endl;	
+		}
+		
+		void insertAtPosition(int id, int pos)
+		{
+			node *newNode=new node(id);
+			if(pos <= 1 || head==NULL)
+			{
+				cout<<"The list is empty"<<endl;
+				cout<<"Insert at beginning first..."<<endl;
+				insertAtBeginning(id);
+				return;
+			}
+			node *temp = head;
+			int count=1;
+			
+			newNode=new node(id);
+			newNode->next=temp->next;
+			newNode->prev=temp;
+			temp->next->prev=newNode;
+			temp->next=newNode;
+			
+			cout<<"The pateint id "<<id<<" is inserted at position "<<pos<<endl;
+			cout<<endl;
+		}
+		
+		void delFromBeg()
+		{
+			if(head == NULL)
+			{
+				cout<<"The list is empty...Nothing to delete!"<<endl;
+				return;
+			}
+			node *temp =head;
+			
+			if(head == tail)
+			{
+				head=tail=NULL;
+			}
+			else
+			{
+				head=head->next;
+				head->prev=NULL;
+			}
+			cout<<"Deleted Patient: "<<temp->patientID<<"from beginning..."<<endl;
+			delete temp;
+		}
+		void displayForward()
+		{
+			node *temp=head;
+			cout<<"List of patients(in forward direction):"<<endl;
+			while(temp != NULL)
+			{
+				cout<<"Patient's ID; "<<temp->patientID<<endl;
+				temp=temp->next;
+			}
+			cout<<endl;
+		}
+		void displayBack()
+		{
+			node *temp=tail;
+			cout<<"Backward: "<<endl;
+			while(temp != NULL)
+			{
+				cout<<temp->patientID<<endl;
+				temp=temp->prev;
+			}
+			cout<<endl;
+		}
+};
+
+int main(int argc, char** argv) {
+	
+	ERqueue ER;
+	ER.insertAtBeginning(101);
+	ER.insertAtEnd(102);
+	ER.insertAtEnd(114);
+	ER.insertAtPosition(100,2);
+	ER.displayForward();
+	ER.displayBack();
+		return 0;
+}
